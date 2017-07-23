@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import unittest
 from selenium import webdriver
-from waiting import wait
 
 
-class Drop_down_menu_popular_services(unittest.TestCase):
+
+class test_drop_down_menu_popular_services(unittest.TestCase):
 
     def setUp(self):
         self.wd = webdriver.Chrome()
@@ -14,7 +14,7 @@ class Drop_down_menu_popular_services(unittest.TestCase):
 
         wd = self.wd
         wd.get("https://www.mos.ru/")
-        wd.assertEquel('mos-layouts-services_menu-popular')
+        # wd.assertEquel('mos-layouts-services_menu-popular')
         wd.find_element_by_link_text("Результаты поквартирного голосования по проекту программы реновации").click()
 
         wd.find_element_by_css_selector("h1").click()
