@@ -1,5 +1,6 @@
 from selenium import webdriver
 import time
+from core.session import SessionHelper
 
 
 # По курсу папка не core, а fixture
@@ -10,13 +11,8 @@ class Initialization:
         self.wd = webdriver.Chrome()
         self.wd.maximize_window()
         self.wd.implicitly_wait(60)
+        self.session = SessionHelper(self)
 
-    def logout(self):
-        wd = self.wd
-        # logout mos.ru
-        time.sleep(2)
-        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-        wd.find_element_by_class_name("mos-layout-auth-out").click()
 
     def go_to_pages(self):
         wd = self.wd
@@ -52,19 +48,6 @@ class Initialization:
         assert True == (count == 5)
         # self.assertEqual(len(wd.find_elements_by_xpath('//div[contains(@class, "mos-layouts-services_menu-popular")]/ul/li/a')),6)
 
-    def login(self, account):
-        wd = self.wd
-        self.open_home_page()
-        # login
-        wd.find_element_by_class_name("mos-header__controls-login-button-enter").click()
-        wd.find_element_by_id("alias").click()
-        wd.find_element_by_id("alias").clear()
-        wd.find_element_by_id("alias").send_keys(account.username)
-        # password
-        wd.find_element_by_id("aliaspswd").click()
-        wd.find_element_by_id("aliaspswd").clear()
-        wd.find_element_by_id("aliaspswd").send_keys(account.password)
-        wd.find_element_by_id('outerlogin_button').click()
 
     def open_home_page(self):
         wd = self.wd
