@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from account import Account
 import pytest
-from initialization import Initialization
+
+from core.initialization import Initialization
+from model.account import Account
+
 
 # Функция создающая фикстуру
 # requset.addfinalizer - параметр с методом разрушающий фикстуру

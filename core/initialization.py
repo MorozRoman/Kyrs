@@ -1,5 +1,8 @@
 from selenium import webdriver
 import time
+
+
+# По курсу папка не core, а fixture
 # В данный класс переносим все вспомогательные методы
 class Initialization:
 
