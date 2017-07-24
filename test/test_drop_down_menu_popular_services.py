@@ -15,7 +15,7 @@ def app(request):
 
 
 def test_Drop_down_menu_popular_services(app):
-    app.session.login(Account(username="dit2015", password="mpgu2015"))
-    app.present_popular_services()
-    app.go_to_pages()
+    app.session.login(Account(username=" ", password=" "))
+    app.pages.present_popular_services()
+    app.pages.go_to_pages()
     app.session.logout()
