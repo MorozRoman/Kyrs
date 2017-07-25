@@ -3,8 +3,7 @@ from model.drivers_license import DriversLicense
 
 
 
-
-def test_add_drivers_license(app):
+def test_Drop_down_menu_popular_services(app):
     app.session.login(Account(username=" ", password=" "))
-    app.pages.add_drivers_license(DriversLicense(serial_number="6666666666", date_issue="28032009"))
+    app.pages.modify_drivers_license(DriversLicense(serial_number="9999999999"))
     app.session.logout()

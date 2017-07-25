@@ -39,14 +39,26 @@ class PagesHelper:
         # self.assertEqual(len(wd.find_elements_by_xpath('//div[contains(@class, "mos-layouts-services_menu-popular")]/ul/li/a')),6)
 
 
-    def add_drivers_license(self):
+    def add_drivers_license(self, drivers_license):
         wd = self.app.wd
         wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
         wd.find_element_by_link_text("Профиль").click()
         wd.find_element_by_class_name('tab-profile').click()
         wd.find_elements_by_xpath('//h2[contains(@class, "add-doc-btn")]/a').click()
-        wd.find_element_by_class_name('input-text').send_keys('6666666666')
-        wd.find_element_by_class_name('hasDatepicker').send_keys('28032009')
+        wd.find_element_by_class_name('input-text').send_keys(drivers_license.serial_number)
+        wd.find_element_by_class_name('hasDatepicker').send_keys(drivers_license.date_issue)
+        wd.find_element_by_class_name('btn-save').click()
+        wd.find_element_by_class_name('btn-subscr-save').click()
+        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
+
+    def modify_drivers_license(self, drivers_license):
+        wd = self.app.wd
+        # wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+        # wd.find_element_by_link_text("Профиль").click()
+        wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
+        wd.find_elements_by_xpath('//h2[contains(@class, "add-doc-btn")]/a').click()
+        wd.find_element_by_class_name('input-text').send_keys(drivers_license.serial_number)
+        wd.find_element_by_class_name('hasDatepicker').send_keys(drivers_license.date_issue)
         wd.find_element_by_class_name('btn-save').click()
         wd.find_element_by_class_name('btn-subscr-save').click()
         wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
