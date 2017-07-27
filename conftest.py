@@ -1,11 +1,41 @@
 import pytest
 from core.initialization import Initialization
-
+from model.account import Account
 # Функция создающая фикстуру
 # requset.addfinalizer - параметр с методом разрушающий фикстуру
 
-@pytest.fixture(scope = "session")
+# @pytest.fixture(scope = "session")
+# def app(request):
+#     fixture = Initialization()
+#     fixture.session.login(Account(username=" ", password=" "))
+#     def fin():
+#         fixture.session.logout()
+#         fixture.destroy()
+#     request.addfinalizer(fin)
+#     return fixture
+
+
+# Интелектуальная фикстура с проверкой валидности
+fixture = None
+
+@pytest.fixture
 def app(request):
-    fixture = Initialization()
-    request.addfinalizer(fixture.destroy)
+    global fixture
+    if fixture is None:
+        fixture = Initialization()
+        fixture.session.login(Account(username=" ", password=" "))
+    else:
+        if not fixture.is_valid():
+            fixture = Initialization()
+            fixture.session.login(Account(username=" ", password=" "))
+    return fixture
+
+
+# autouse=True - позволяет выполнятся stop автоматически без указания в каком либо методе
+@pytest.fixture(scope="session", autouse=True)
+def stop(request):
+    def fin():
+        fixture.session.logout()
+        fixture.destroy()
+    request.addfinalizer(fin)
     return fixture
