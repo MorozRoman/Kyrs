@@ -41,13 +41,16 @@ class PagesHelper:
 
     def add_drivers_license(self, drivers_license):
         wd = self.app.wd
-        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-        wd.find_element_by_link_text("Профиль").click()
+        self.go_to_profile()
         wd.find_element_by_class_name('tab-profile').click()
         wd.find_elements_by_xpath('//h2[contains(@class, "add-doc-btn")]/a').click()
         self.fill_drivers_license_form(drivers_license)
         # wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
 
+    def go_to_profile(self):
+        wd = self.app.wd
+        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+        wd.find_element_by_link_text("Профиль").click()
 
     def fill_drivers_license_form(self, drivers_license):
         wd = self.app.wd
@@ -67,5 +70,12 @@ class PagesHelper:
     def modify_drivers_license(self, new_drivers_date):
         wd = self.app.wd
         wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
-        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
+        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]//div/a[@class="edit-link"]').click()
         self.fill_drivers_license_form(new_drivers_date)
+
+
+    def delete_drivers_license(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        # wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
+        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]//div/a[@class="remove-link"]').click()
