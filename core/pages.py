@@ -49,8 +49,15 @@ class PagesHelper:
 
     def go_to_profile(self):
         wd = self.app.wd
-        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-        wd.find_element_by_link_text("Профиль").click()
+        # Оптимизация переходов между страницами
+        if not (wd.current_url.endswith('/my/#profile')):
+            wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+            wd.find_element_by_link_text("Профиль").click()
+        # Равносильно
+        # if wd.current_url.endswith('/my/#profile'):
+        #     return
+        # wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+        # wd.find_element_by_link_text("Профиль").click()
 
     def fill_drivers_license_form(self, drivers_license):
         wd = self.app.wd
