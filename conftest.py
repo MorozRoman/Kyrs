@@ -14,7 +14,7 @@ from model.account import Account
 #     request.addfinalizer(fin)
 #     return fixture
 
-
+#
 # Интелектуальная фикстура с проверкой валидности
 fixture = None
 
