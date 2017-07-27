@@ -79,3 +79,10 @@ class PagesHelper:
         self.go_to_profile()
         # wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
         wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]//div/a[@class="remove-link"]').click()
+
+
+    #Проверка на наличие элемента, если не оди, то делаем подсчет элементов
+    def count(self):
+        wd = self.app.wd
+        return  len(wd.find_element_by_link_text("Водительское удостоверение"))
+
