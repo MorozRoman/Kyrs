@@ -9,7 +9,7 @@ from core.pages import PagesHelper
 class Initialization:
 
     def __init__(self):
-        self.wd = webdriver.Chrome()
+        self.wd = webdriver.Chrome('G:\Projects\Testings\\recources\drivers\win\chromedriver.exe')
         self.wd.maximize_window()
         self.wd.implicitly_wait(60)
         self.session = SessionHelper(self)
@@ -28,6 +28,7 @@ class Initialization:
     def open_home_page(self):
         wd = self.wd
         wd.get("https://www.mos.ru/")
+
 
     def destroy(self):
         self.wd.quit()

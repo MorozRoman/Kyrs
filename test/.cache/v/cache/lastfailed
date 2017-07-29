@@ -1,4 +1,3 @@
 {
-  "test_modify_drivers_license_date.py::test_modify_drivers_license_serial_date": true,
-  "test_modify_drivers_license_date.py::test_modify_drivers_license_serial_number": true
+  "test_add_drivers_license.py::test_add_drivers_license": true
 }

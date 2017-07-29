@@ -41,15 +41,20 @@ class PagesHelper:
 
     def add_drivers_license(self, drivers_license):
         wd = self.app.wd
+        # self.go_to_profil()
+        # wd.switch_to_window(wd.window_handles[1])
         self.go_to_profile()
-        wd.find_element_by_class_name('tab-profile').click()
-        wd.find_elements_by_xpath('//h2[contains(@class, "add-doc-btn")]/a').click()
+        wd.switch_to_window(wd.window_handles[1])
+        if not (wd.find_element_by_link_text("+ Водительское удостоверение")):
+                self.remove_driver_license()
+        wd.find_element_by_link_text("+ Водительское удостоверение").click()
         self.fill_drivers_license_form(drivers_license)
-        # wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
+
 
     def go_to_profile(self):
         wd = self.app.wd
         # Оптимизация переходов между страницами
+        wd.implicitly_wait(3)
         if not (wd.current_url.endswith('/my/#profile')):
             wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
             wd.find_element_by_link_text("Профиль").click()
@@ -58,6 +63,13 @@ class PagesHelper:
         #     return
         # wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
         # wd.find_element_by_link_text("Профиль").click()
+
+    def go_to_profil(self):
+        wd = self.app.wd
+        # Оптимизация переходов между страницами
+        if not (wd.current_url.endswith('/my/')):
+            wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+            wd.find_element_by_link_text("Профиль").click()
 
     def fill_drivers_license_form(self, drivers_license):
         wd = self.app.wd
@@ -84,12 +96,22 @@ class PagesHelper:
     def delete_drivers_license(self):
         wd = self.app.wd
         self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
         # wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
-        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]//div/a[@class="remove-link"]').click()
+        self.remove_driver_license()
+
+    def remove_driver_license(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[2]').click()
+        wd.find_element_by_class_name('btn-close-box').click()
 
 
     #Проверка на наличие элемента, если не оди, то делаем подсчет элементов
     def count(self):
         wd = self.app.wd
         return  len(wd.find_element_by_link_text("Водительское удостоверение"))
+
+
+
+
 
