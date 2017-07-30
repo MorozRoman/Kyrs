@@ -128,3 +128,49 @@ class PagesHelper:
 
 
 
+# Новый тест для работы со списками
+
+    def add_payment_information(self, apartment_description, flat_number):
+        wd = self.app.wd
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        # wd.find_element_by_link_text('+ Водительское удостоверение')
+        wd.find_element_by_link_text("+ Данные об оплате").click()
+        self.fill_payment_information_form(apartment_description, flat_number)
+
+    def fill_payment_information_form(self, apartment_description, flat_number):
+        wd = self.app.wd
+        self.input_information('//div[contains(@data-link, "HOUSE")]/section/form/div/div/div[1]/div[1]/input[@name="COMMENT"]', apartment_description)
+        self.input_information('//div[contains(@data-link, "HOUSE")]/section/form/div/div/div[3]/div/input[@name="FLAT_NUMBER"]', flat_number)
+        wd.find_element_by_class_name('btn-save').click()
+        if not wd.find_element_by_class_name('popup_messagebox'):
+            wd.find_element_by_class_name('btn-subscr-save').click()
+        wd.find_element_by_class_name('btn-left').click()
+
+    def input_information(self, field_text, text):
+        wd = self.app.wd
+        # Конструкция if then else:
+        if text is not None:
+            wd.find_element_by_xpath(field_text).click()
+            wd.find_element_by_xpath(field_text).clear()
+            wd.find_element_by_xpath(field_text).send_keys(text)
+
+
+    def  del_payment_information(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        self.remove_payment_information()
+
+    def remove_payment_information(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[4]/div[2]/div/div/div/div/a[2]').click()
+        wd.find_element_by_class_name('btn-close-box').click()
+
+
+    def modify_payment_information(self,  apartment_description, flat_number):
+        wd = self.app.wd
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        wd.find_element_by_xpath('//div[contains(@data-link, "HOUSE")]/div/div/div/div/a[@class="edit-link"]').click()
+        self.fill_payment_information_form( apartment_description, flat_number)

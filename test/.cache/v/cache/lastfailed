@@ -1,1 +1,3 @@
-{}
+{
+  "test_modify_zhky.py::test_modify_payment_information_flat_number": true
+}
