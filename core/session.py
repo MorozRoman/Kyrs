@@ -35,7 +35,7 @@ class SessionHelper:
     def ensure_login(self, account):
         wd = self.app.wd
         # if self.is_logged_in():
-        #     if self.is_logged_in_as(account.username):
+        #     if self.is_logged_in_as():
         #         return
         #     else:
         #         self.logout()
@@ -45,17 +45,19 @@ class SessionHelper:
     # Проверка на нахождение в учетке при попытке выйти
     def ensure_logout(self):
         wd = self.app.wd
-        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-    #     if self.is_logged_in():
-    #         self.logout()
-    #
-    # def is_logged_in(self):
-    #     wd = self.app.wd
-    #     if not wd.find_element_by_class_name("mos-header__controls-login-button"):
-    #             return 0
-    #     return 1
+        if self.is_logged_in():
+            self.logout()
 
-    def is_logged_in_as(self, username):
+    def is_logged_in(self):
         wd = self.app.wd
-        return len(wd.find_element_by_xpath('//div[@class="mos-header__controls-button"]//span[.="каширин сергей александрович"]'))
+        if not (wd.find_element_by_class_name("mos-layout-icon-dropdown_up")):
+                return 0
+        return 1
+
+    def is_logged_in_as(self):
+        wd = self.app.wd
+        if wd.find_element_by_link_text('тестов тест тестович'):
+            return 1
+        return 0
+        # return len(wd.find_element_by_xpath('//div[@class="mos-header__controls-button"]//span[.="каширин сергей александрович"]'))
         # return len(wd.find_element_by_xpath('//div[contains(@class, "mos-header__controls-button")]//span[@class, "mos-header__controls-button-label"]')).text == "каширин сергей александрович"

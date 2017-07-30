@@ -19,7 +19,7 @@ class Initialization:
     def is_valid(self):
         try:
             # Адресс текущей страницы
-            self.wd.current_url()
+            self.wd.current_url
             return True
         except:
             return False

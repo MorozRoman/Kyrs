@@ -1,5 +1,8 @@
 import time
 
+from model.drivers_license import DriversLicense
+
+
 class PagesHelper:
     def  __init__(self, app):
         self.app = app
@@ -8,8 +11,8 @@ class PagesHelper:
         wd = self.app
         # Проверка страниц
         # переход к 1
-        # wd.find_elements_by_xpath('//div[contains(@class, "mos-layouts-services_menu-popular")]/ul/li/a')[1].click()
-        # time.sleep(2)
+
+        # wd.find_element_by_xpath('//*[@id="mos-header"]/div[1]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul[2]/li[1]').click()
         wd.find_element_by_link_text("Результаты поквартирного голосования по проекту программы реновации").click()
         # wd.find_element_by_css_selector("h1")
         time.sleep(2)
@@ -42,11 +45,11 @@ class PagesHelper:
     def add_drivers_license(self, drivers_license):
         wd = self.app.wd
         # self.go_to_profil()
-        # wd.switch_to_window(wd.window_handles[1])
         self.go_to_profile()
         wd.switch_to_window(wd.window_handles[1])
-        if not (wd.find_element_by_link_text("+ Водительское удостоверение")):
-                self.remove_driver_license()
+        # wd.find_element_by_link_text('+ Водительское удостоверение')
+        if (wd.find_element_by_xpath('//*[@data-link="DRIVER_LICENSE"]/div/div/div/div/h2/a[@class="view-link"]')):
+            self.remove_driver_license()
         wd.find_element_by_link_text("+ Водительское удостоверение").click()
         self.fill_drivers_license_form(drivers_license)
 
@@ -54,10 +57,11 @@ class PagesHelper:
     def go_to_profile(self):
         wd = self.app.wd
         # Оптимизация переходов между страницами
-        wd.implicitly_wait(3)
-        if not (wd.current_url.endswith('/my/#profile')):
+        wd.implicitly_wait(15)
+        time.sleep(2)
+        if not (wd.current_url.endswith('/#profile')):
             wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-            wd.find_element_by_link_text("Профиль").click()
+            wd.find_element_by_link_text("Личные данные").click()
         # Равносильно
         # if wd.current_url.endswith('/my/#profile'):
         #     return
@@ -76,7 +80,10 @@ class PagesHelper:
         self.input_text("input-text", drivers_license.serial_number)
         self.input_text("hasDatepicker", drivers_license.date_issue)
         wd.find_element_by_class_name('btn-save').click()
-        wd.find_element_by_class_name('btn-subscr-save').click()
+        if not wd.find_element_by_class_name('popup_messagebox'):
+            wd.find_element_by_class_name('btn-subscr-save').click()
+        wd.find_element_by_class_name('btn-left').click()
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[1]').click()
 
     def input_text(self, field_text, text):
         wd = self.app.wd
@@ -86,18 +93,19 @@ class PagesHelper:
             wd.find_element_by_class_name(field_text).clear()
             wd.find_element_by_class_name(field_text).send_keys(text)
 
+    # new_drivers_date
     def modify_drivers_license(self, new_drivers_date):
         wd = self.app.wd
-        wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
-        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]//div/a[@class="edit-link"]').click()
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[1]').click()
         self.fill_drivers_license_form(new_drivers_date)
 
 
     def delete_drivers_license(self):
         wd = self.app.wd
-        self.go_to_profile()
         wd.switch_to_window(wd.window_handles[1])
-        # wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
+        self.go_to_profile()
         self.remove_driver_license()
 
     def remove_driver_license(self):
@@ -109,8 +117,13 @@ class PagesHelper:
     #Проверка на наличие элемента, если не оди, то делаем подсчет элементов
     def count(self):
         wd = self.app.wd
-        return  len(wd.find_element_by_link_text("Водительское удостоверение"))
-
+        self.go_to_profile()
+        time.sleep(3)
+        # return len(wd.find_element_by_link_text("Водительское удостоверение"))
+        return 1
+        # if not (wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/h2/a')):
+        #         return 0
+        # return 1
 
 
 
