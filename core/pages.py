@@ -1,6 +1,6 @@
 import time
 
-from model.drivers_license import DriversLicense
+from model.zhky import Zhky
 
 
 class PagesHelper:
@@ -174,3 +174,18 @@ class PagesHelper:
         wd.switch_to_window(wd.window_handles[1])
         wd.find_element_by_xpath('//div[contains(@data-link, "HOUSE")]/div/div/div/div/a[@class="edit-link"]').click()
         self.fill_payment_information_form( apartment_description, flat_number)
+
+
+
+    def get_lits(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        # wd.find_element_by_css_selector('div.doc-holder') Поиск по селектору где class=doc-holder.
+        # Нужно привязаться к data-link="HOUSE|N", где N= 0 до ∞
+        get_list = []
+        # wd.find_elements_by_xpath('//div[contains(@data-link, "HOUSE|0")]')
+        for element in wd.find_elements_by_xpath('//div[contains(@data-link, "Оплата ЖКУ")]/div[class="doc-holder"]'):
+            text = element.text
+            # id = wd.find_element_by_xpath('').get_attribute('data-link')
+            get_list.append(Zhky(name=text))
+        return get_list
