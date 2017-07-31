@@ -9,7 +9,7 @@ from core.pages import PagesHelper
 class Initialization:
 
     def __init__(self):
-        self.wd = webdriver.Chrome('G:\Projects\Testings\\recources\drivers\win\chromedriver.exe')
+        self.wd = webdriver.Chrome('C:\Projects(GitHub)\Testings\\recources\drivers\win\chromedriver.exe')
         self.wd.maximize_window()
         self.wd.implicitly_wait(60)
         self.session = SessionHelper(self)

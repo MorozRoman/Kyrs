@@ -132,7 +132,7 @@ class PagesHelper:
 
     def add_payment_information(self, apartment_description, flat_number):
         wd = self.app.wd
-        self.go_to_profile()
+        # self.go_to_profile()
         wd.switch_to_window(wd.window_handles[1])
         # wd.find_element_by_link_text('+ Водительское удостоверение')
         wd.find_element_by_link_text("+ Данные об оплате").click()
@@ -182,9 +182,11 @@ class PagesHelper:
         self.go_to_profile()
         # wd.find_element_by_css_selector('div.doc-holder') Поиск по селектору где class=doc-holder.
         # Нужно привязаться к data-link="HOUSE|N", где N= 0 до ∞
+        wd.switch_to_window(wd.window_handles[1])
         get_list = []
         # wd.find_elements_by_xpath('//div[contains(@data-link, "HOUSE|0")]')
-        for element in wd.find_elements_by_xpath('//div[contains(@data-link, "Оплата ЖКУ")]/div[class="doc-holder"]'):
+        # for element in wd.find_elements_by_xpath('//div[contains(@data-link, "Оплата ЖКУ")]/div[class="doc-holder"]'):
+        for element in wd.find_elements_by_css_selector('div.doc-holder'):
             text = element.text
             # id = wd.find_element_by_xpath('').get_attribute('data-link')
             get_list.append(Zhky(name=text))
