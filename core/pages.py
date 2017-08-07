@@ -1,5 +1,8 @@
 import time
 
+from model.zhky import Zhky
+
+
 class PagesHelper:
     def  __init__(self, app):
         self.app = app
@@ -8,8 +11,8 @@ class PagesHelper:
         wd = self.app
         # Проверка страниц
         # переход к 1
-        # wd.find_elements_by_xpath('//div[contains(@class, "mos-layouts-services_menu-popular")]/ul/li/a')[1].click()
-        # time.sleep(2)
+
+        # wd.find_element_by_xpath('//*[@id="mos-header"]/div[1]/div/div[2]/div[1]/div/div/div[1]/div[1]/ul[2]/li[1]').click()
         wd.find_element_by_link_text("Результаты поквартирного голосования по проекту программы реновации").click()
         # wd.find_element_by_css_selector("h1")
         time.sleep(2)
@@ -41,20 +44,46 @@ class PagesHelper:
 
     def add_drivers_license(self, drivers_license):
         wd = self.app.wd
-        wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
-        wd.find_element_by_link_text("Профиль").click()
-        wd.find_element_by_class_name('tab-profile').click()
-        wd.find_elements_by_xpath('//h2[contains(@class, "add-doc-btn")]/a').click()
+        # self.go_to_profil()
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        # wd.find_element_by_link_text('+ Водительское удостоверение')
+        if (wd.find_element_by_xpath('//*[@data-link="DRIVER_LICENSE"]/div/div/div/div/h2/a[@class="view-link"]')):
+            self.remove_driver_license()
+        wd.find_element_by_link_text("+ Водительское удостоверение").click()
         self.fill_drivers_license_form(drivers_license)
-        # wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
 
+
+    def go_to_profile(self):
+        wd = self.app.wd
+        # Оптимизация переходов между страницами
+        wd.implicitly_wait(15)
+        time.sleep(2)
+        if not (wd.current_url.endswith('/#profile')):
+            wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+            wd.find_element_by_link_text("Личные данные").click()
+        # Равносильно
+        # if wd.current_url.endswith('/my/#profile'):
+        #     return
+        # wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+        # wd.find_element_by_link_text("Профиль").click()
+
+    def go_to_profil(self):
+        wd = self.app.wd
+        # Оптимизация переходов между страницами
+        if not (wd.current_url.endswith('/my/')):
+            wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+            wd.find_element_by_link_text("Профиль").click()
 
     def fill_drivers_license_form(self, drivers_license):
         wd = self.app.wd
         self.input_text("input-text", drivers_license.serial_number)
         self.input_text("hasDatepicker", drivers_license.date_issue)
         wd.find_element_by_class_name('btn-save').click()
-        wd.find_element_by_class_name('btn-subscr-save').click()
+        if not wd.find_element_by_class_name('popup_messagebox'):
+            wd.find_element_by_class_name('btn-subscr-save').click()
+        wd.find_element_by_class_name('btn-left').click()
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[1]').click()
 
     def input_text(self, field_text, text):
         wd = self.app.wd
@@ -64,8 +93,101 @@ class PagesHelper:
             wd.find_element_by_class_name(field_text).clear()
             wd.find_element_by_class_name(field_text).send_keys(text)
 
+    # new_drivers_date
     def modify_drivers_license(self, new_drivers_date):
         wd = self.app.wd
-        wd.find_elements_by_xpath('//li[contains(@id="tab-profile")]/a[href="#profile"]').click()
-        wd.find_elements_by_xpath('//div[contains(@data-link="DRIVER_LICENSE"]/div/a[@class="edit-link"]').click()
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[1]').click()
         self.fill_drivers_license_form(new_drivers_date)
+
+
+    def delete_drivers_license(self):
+        wd = self.app.wd
+        wd.switch_to_window(wd.window_handles[1])
+        self.go_to_profile()
+        self.remove_driver_license()
+
+    def remove_driver_license(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/a[2]').click()
+        wd.find_element_by_class_name('btn-close-box').click()
+
+
+    #Проверка на наличие элемента, если не оди, то делаем подсчет элементов
+    def count(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        time.sleep(3)
+        # return len(wd.find_element_by_link_text("Водительское удостоверение"))
+        return 1
+        # if not (wd.find_element_by_xpath('//*[@id="all-docs"]/div[1]/div[4]/div/div/div/div/h2/a')):
+        #         return 0
+        # return 1
+
+
+
+
+# Новый тест для работы со списками
+
+    def add_payment_information(self, apartment_description, flat_number):
+        wd = self.app.wd
+        # self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        # wd.find_element_by_link_text('+ Водительское удостоверение')
+        wd.find_element_by_link_text("+ Данные об оплате").click()
+        self.fill_payment_information_form(apartment_description, flat_number)
+
+    def fill_payment_information_form(self, apartment_description, flat_number):
+        wd = self.app.wd
+        self.input_information('//div[contains(@data-link, "HOUSE")]/section/form/div/div/div[1]/div[1]/input[@name="COMMENT"]', apartment_description)
+        self.input_information('//div[contains(@data-link, "HOUSE")]/section/form/div/div/div[3]/div/input[@name="FLAT_NUMBER"]', flat_number)
+        wd.find_element_by_class_name('btn-save').click()
+        if not wd.find_element_by_class_name('popup_messagebox'):
+            wd.find_element_by_class_name('btn-subscr-save').click()
+        wd.find_element_by_class_name('btn-left').click()
+
+    def input_information(self, field_text, text):
+        wd = self.app.wd
+        # Конструкция if then else:
+        if text is not None:
+            wd.find_element_by_xpath(field_text).click()
+            wd.find_element_by_xpath(field_text).clear()
+            wd.find_element_by_xpath(field_text).send_keys(text)
+
+
+    def  del_payment_information(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        self.remove_payment_information()
+
+    def remove_payment_information(self):
+        wd = self.app.wd
+        wd.find_element_by_xpath('//*[@id="all-docs"]/div[4]/div[2]/div/div/div/div/a[2]').click()
+        wd.find_element_by_class_name('btn-close-box').click()
+
+
+    def modify_payment_information(self,  apartment_description, flat_number):
+        wd = self.app.wd
+        self.go_to_profile()
+        wd.switch_to_window(wd.window_handles[1])
+        wd.find_element_by_xpath('//div[contains(@data-link, "HOUSE")]/div/div/div/div/a[@class="edit-link"]').click()
+        self.fill_payment_information_form( apartment_description, flat_number)
+
+
+
+    def get_lits(self):
+        wd = self.app.wd
+        self.go_to_profile()
+        # wd.find_element_by_css_selector('div.doc-holder') Поиск по селектору где class=doc-holder.
+        # Нужно привязаться к data-link="HOUSE|N", где N= 0 до ∞
+        wd.switch_to_window(wd.window_handles[1])
+        get_list = []
+        # wd.find_elements_by_xpath('//div[contains(@data-link, "HOUSE|0")]')
+        # for element in wd.find_elements_by_xpath('//div[contains(@data-link, "Оплата ЖКУ")]/div[class="doc-holder"]'):
+        for element in wd.find_elements_by_css_selector('div.doc-holder'):
+            text = element.text
+            # id = wd.find_element_by_xpath('').get_attribute('data-link')
+            get_list.append(Zhky(name=text))
+        return get_list

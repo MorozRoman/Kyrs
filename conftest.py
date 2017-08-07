@@ -23,25 +23,16 @@ def app(request):
     global fixture
     if fixture is None:
         fixture = Initialization()
-        # fixture.session.login(Account(username=" ", password=" "))
+        fixture.session.login(Account(username="djept@mail.ru", password="R123456M"))
     else:
         if not fixture.is_valid():
             fixture = Initialization()
-            # fixture.session.login(Account(username=" ", password=" "))
-    fixture.session.ensure_login(Account(username=" ", password=" "))
+            fixture.session.login(Account(username="djept@mail.ru", password="R123456M"))
+    # fixture.session.ensure_login(Account(username="djept@mail.ru", password="R123456M"))
     return fixture
 
 
 # autouse=True - позволяет выполнятся stop автоматически без указания в каком либо методе
-# @pytest.fixture(scope="session", autouse=True)
-# def stop(request):
-#     def fin():
-#         fixture.session.logout()
-#         fixture.destroy()
-#     request.addfinalizer(fin)
-#     return fixture
-
-
 #Модуль: интелектуальный Login и Logout
 @pytest.fixture(scope="session", autouse=True)
 def stop(request):
