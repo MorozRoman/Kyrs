@@ -7,3 +7,5 @@ def test_add_payment_information(app):
     new_lists = app.pages.get_lits()
     assert len(old_lists) + 1 == len(new_lists)
 
+
+

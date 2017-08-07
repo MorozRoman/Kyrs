@@ -134,7 +134,6 @@ class PagesHelper:
         wd = self.app.wd
         # self.go_to_profile()
         wd.switch_to_window(wd.window_handles[1])
-        # wd.find_element_by_link_text('+ Водительское удостоверение')
         wd.find_element_by_link_text("+ Данные об оплате").click()
         self.fill_payment_information_form(apartment_description, flat_number)
 

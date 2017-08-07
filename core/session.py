@@ -1,3 +1,5 @@
+import time
+
 from model.account import Account
 
 
@@ -23,9 +25,12 @@ class SessionHelper:
 
     def logout(self):
         wd = self.app.wd
+        # app = self.app
         # logout mos.ru
         # time.sleep(2)
+        # app.scroll_to_bottom()
         wd.find_element_by_class_name('mos-layout-icon-dropdown_up').click()
+        time.sleep(1)
         wd.find_element_by_class_name("mos-layout-auth-out").click()
 
 

@@ -32,3 +32,16 @@ class Initialization:
 
     def destroy(self):
         self.wd.quit()
+
+
+    #Скролл к footer
+    def scroll_to_bottom(self):
+        self.wd.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+
+    # скролл к header
+    def scroll_to_up(self):
+        self.wd.execute_script('window.scrollTo(0, 0)')
+
+    # тоже скролл к header
+    # def scroll_to_bottom(self):
+    #     self.wd.execute_script('window.scrollTo(0, document.body.scrollView);')
